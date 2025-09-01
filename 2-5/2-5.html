@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>第二站第五題</title>
+    <title>图层控制器</title>
     <style>
         * {
             margin: 0;
@@ -13,42 +13,57 @@
         }
         
         body {
-            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            background: linear-gradient(45deg, #1a2a6c, #b21f1f, #fdbbfd);
             color: white;
             min-height: 100vh;
-            padding: 20px;
+            padding: 0px;
+            display: flex;
+            flex-direction: column;
+            padding-bottom: 110px; /* 减少底部空间高度 */
         }
         
         .container {
-            max-width: 1400px;
+            width: 100%;
+            max-width: 2000px;
             margin: 0 auto;
-            padding: 20px;
+            padding: 3px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
         }
         
         .content {
             display: flex;
             flex-direction: column;
             gap: 30px;
+            flex: 1;
+        }
+        
+        .images-container {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+            flex: 1;
+            margin-bottom: 15px; /* 减少与控制栏之间的间距 */
         }
         
         .image-container {
             position: relative;
-            height: 1000px;
-            border: 3px solid rgba(255, 255, 255, 0.2);
+            width: 100%;
+            border: 0px solid rgba(255, 255, 255, 0.2);
             border-radius: 10px;
             overflow: hidden;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
             background: #2c3e50;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
         
         .base-image, .layer {
-            position: absolute;
             width: 100%;
-            height: 100%;
-            top: 0;
-            left: 0;
             transition: opacity 0.3s ease;
-            object-fit: contain;
+            display: block;
         }
         
         .base-image {
@@ -56,52 +71,85 @@
         }
         
         .layer {
+            position: absolute;
+            top: 0;
+            left: 0;
             opacity: 0;
             z-index: 2;
+            height: 100%;
+            object-fit: contain;
+        }
+        
+        /* 闪烁动画 - 每秒3次 */
+        .layer.blinking {
+            animation: blink 1s infinite;
+        }
+        
+        @keyframes blink {
+            0%, 33.3%, 66.6% { opacity: 1; }
+            16.65%, 49.95%, 83.25% { opacity: 0.5; }
         }
         
         .controls {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
+            background: rgba(30, 30, 40, 0.45); /* 增加透明度 */
+            backdrop-filter: blur(8px);
             padding: 15px;
             border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.8);
+            position: fixed;
+            bottom: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: calc(100% - 40px);
+            max-width: 1600px;
+            z-index: 1000;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
         
-        .button-row {
+        .controls:hover {
+            background: rgba(40, 40, 50, 0.8);
+        }
+        
+        .main-controls {
             display: flex;
+            flex-wrap: wrap;
             justify-content: center;
             align-items: center;
-            flex-wrap: wrap;
             gap: 10px;
-            margin-bottom: 10px;
+            margin-bottom: 15px;
         }
         
-        .button-row.second-row {
-            margin-top: 15px;
+        .buttons-row {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
         }
         
         .toggle-btn {
-            padding: 8px 15px;
+            padding: 8px 16px;
             border-radius: 20px;
             border: 2px solid rgba(255, 255, 255, 0.3);
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.15);
             color: white;
             font-size: 0.9rem;
             font-weight: bold;
             cursor: pointer;
             transition: all 0.3s ease;
             white-space: nowrap;
+            flex-shrink: 0;
         }
         
         .toggle-btn:hover {
-            background: rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.25);
             transform: translateY(-2px);
         }
         
         .toggle-btn.active {
-            background: rgba(76, 175, 80, 0.5);
-            box-shadow: 0 0 10px rgba(76, 175, 80, 0.5);
+            background: rgba(76, 175, 80, 0.6);
+            box-shadow: 0 0 10px rgba(76, 175, 80, 0.6);
         }
         
         .nav-btn {
@@ -109,7 +157,7 @@
             height: 35px;
             border-radius: 50%;
             border: 2px solid rgba(255, 255, 255, 0.3);
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.15);
             color: white;
             font-size: 1.1rem;
             font-weight: bold;
@@ -118,10 +166,11 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            flex-shrink: 0;
         }
         
         .nav-btn:hover {
-            background: rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.25);
             transform: translateY(-2px);
         }
         
@@ -132,43 +181,75 @@
         }
         
         .number-btn {
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
+            min-width: 35px;
+            height: 35px;
+            padding: 0 6px;
+            border-radius: 18px;
             border: 2px solid rgba(255, 255, 255, 0.3);
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.15);
             color: white;
             font-size: 0.9rem;
             font-weight: bold;
             cursor: pointer;
             transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
         }
         
         .number-btn:hover {
-            background: rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.25);
             transform: translateY(-2px);
         }
         
         .number-btn.active {
             background: rgba(255, 255, 255, 0.9);
-            color: #1a2a6c;
+            color: #2c3e50;
             box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
         }
         
         .key-hint {
             text-align: center;
-            margin-top: 10px;
-            font-size: 0.8rem;
-            opacity: 0.7;
+            margin-top: 15px;
+            font-size: 0.9rem;
+            opacity: 0.8;
         }
         
-        @media (max-width: 1400px) {
-            .image-container {
-                height: 500px;
+        @media (max-width: 992px) {
+            .main-controls {
+                gap: 8px;
             }
             
-            .button-row {
-                gap: 8px;
+            .toggle-btn {
+                padding: 7px 14px;
+                font-size: 0.85rem;
+            }
+            
+            .nav-btn, .number-btn {
+                width: 32px;
+                height: 32px;
+                font-size: 1rem;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            body {
+                padding-bottom: 65px;
+            }
+            
+            .controls {
+                bottom: 12px;
+                width: calc(100% - 30px);
+                padding: 12px;
+            }
+            
+            .main-controls {
+                gap: 6px;
             }
             
             .toggle-btn {
@@ -176,39 +257,66 @@
                 font-size: 0.8rem;
             }
             
-            .nav-btn {
+            .nav-btn, .number-btn {
                 width: 30px;
                 height: 30px;
-                font-size: 1rem;
-            }
-            
-            .number-btn {
-                width: 25px;
-                height: 25px;
-                font-size: 0.8rem;
+                font-size: 0.9rem;
             }
         }
         
         @media (max-width: 600px) {
-            .button-row {
-                gap: 6px;
+            body {
+                padding-bottom: 60px;
+            }
+            
+            .controls {
+                bottom: 10px;
+                width: calc(100% - 20px);
+                padding: 10px;
+            }
+            
+            .main-controls {
+                gap: 5px;
             }
             
             .toggle-btn {
                 padding: 5px 10px;
-                font-size: 0.7rem;
+                font-size: 0.75rem;
             }
             
-            .nav-btn {
+            .nav-btn, .number-btn {
                 width: 28px;
                 height: 28px;
-                font-size: 0.9rem;
+                font-size: 0.85rem;
             }
             
-            .number-btn {
-                width: 22px;
-                height: 22px;
+            .key-hint {
+                font-size: 0.8rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            body {
+                padding-bottom: 55px;
+            }
+            
+            .controls {
+                bottom: 8px;
+            }
+            
+            .main-controls {
+                gap: 4px;
+            }
+            
+            .toggle-btn {
+                padding: 4px 8px;
                 font-size: 0.7rem;
+            }
+            
+            .nav-btn, .number-btn {
+                width: 26px;
+                height: 26px;
+                font-size: 0.8rem;
             }
         }
     </style>
@@ -216,103 +324,155 @@
 <body>
     <div class="container">
         <div class="content">
-            <div class="image-container">
-                <img src="1.gif" alt="底图" class="base-image">
-                <!-- 图层将通过JavaScript动态添加 -->
-            </div>
-            
-            <div class="controls">
-                <div class="button-row">
-                    <button class="toggle-btn" id="toggle-all">全部显示</button>
-                    <button class="nav-btn" id="prev-layer">←</button>
-                    <button class="nav-btn" id="next-layer">→</button>
-                    
-                    <!-- 第一行数字按钮将通过JavaScript动态添加 -->
+            <div class="images-container">
+                <!-- 对调位置：原来的底部图片现在在上面 -->
+                <div class="image-container" id="bottom-container">
+                    <img src="e0.gif" alt="上图" class="base-image">
+                    <!-- 底部图层将通过JavaScript动态添加 -->
                 </div>
                 
-                <div class="button-row second-row" id="second-row">
-                    <!-- 第二行数字按钮将通过JavaScript动态添加 -->
+                <!-- 对调位置：原来的顶部图片现在在下面 -->
+                <div class="image-container" id="top-container">
+                    <img src="0.gif" alt="下图" class="base-image">
+                    <!-- 顶部图层将通过JavaScript动态添加 -->
                 </div>
                 
-                <div class="button-row" id="third-row">
-                    <!-- 第三行数字按钮将通过JavaScript动态添加 -->
-                </div>
-                
-                <div class="key-hint">使用左右方向键和空格键控制图层</div>
+                <!-- 减少空白区域高度 -->
+          
             </div>
         </div>
     </div>
 
+    <div class="controls">
+        <div class="main-controls">
+            <button class="toggle-btn" id="toggle-all">全部显示</button>
+            <button class="nav-btn" id="prev-layer">←</button>
+            <button class="nav-btn" id="next-layer">→</button>
+            
+            <div class="buttons-row" id="buttons-row">
+                <!-- 数字按钮将通过JavaScript动态添加 -->
+            </div>
+        </div>
+        
+        <div class="key-hint">使用左右方向键切换图层，空格键显示/隐藏所有图层</div>
+    </div>
+
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const buttonRow = document.querySelector('.button-row');
-            const secondRow = document.getElementById('second-row');
-            const thirdRow = document.getElementById('third-row');
-            const imageContainer = document.querySelector('.image-container');
+            const buttonsRow = document.getElementById('buttons-row');
+            const topContainer = document.getElementById('top-container');
+            const bottomContainer = document.getElementById('bottom-container');
             const toggleAllBtn = document.getElementById('toggle-all');
             const prevLayerBtn = document.getElementById('prev-layer');
             const nextLayerBtn = document.getElementById('next-layer');
             
-            // 图层数据 - 使用实际图片URL (26个图层)
-            const layers = [
-                { id: 'layer0', name: '图层 1', image: '2.gif' },
-                { id: 'layer1', name: '图层 2', image: '3.gif' },
-                { id: 'layer2', name: '图层 3', image: '4.gif' },
-                { id: 'layer3', name: '图层 4', image: '5.gif' },
-                { id: 'layer4', name: '图层 5', image: '6.gif' },
-                { id: 'layer5', name: '图层 6', image: '7.gif' },
-                { id: 'layer6', name: '图层 7', image: '8.gif' },
-                { id: 'layer7', name: '图层 8', image: '9.gif' },
-                { id: 'layer8', name: '图层 8', image: '10.gif' },
-                { id: 'layer9', name: '图层 10', image: '11.gif' },
-                { id: 'layer10', name: '图层 11', image: '12.gif' },
-                { id: 'layer11', name: '图层 12', image: '13.gif' },
-                { id: 'layer12', name: '图层 13', image: '14.gif' },
-                { id: 'layer13', name: '图层 14', image: '15.gif' },
-                { id: 'layer14', name: '图层 15', image: '16.gif' },
-                { id: 'layer15', name: '图层 16', image: '17.gif' },
-                { id: 'layer16', name: '图层 17', image: '18.gif' },
-                { id: 'layer17', name: '图层 18', image: '19.gif' },
-                { id: 'layer18', name: '图层 19', image: '20.gif' }
+            // 顶部图层数据 - 使用e1.gif到e11.gif (现在在上方)
+            const topLayers = [
+                { id: 'top-layer0', name: '上图图层 1', image: 'e1.gif' },
+                { id: 'top-layer1', name: '上图图层 2', image: 'e2.gif' },
+                { id: 'top-layer2', name: '上图图层 3', image: 'e3.gif' },
+                { id: 'top-layer3', name: '上图图层 4', image: 'e4.gif' },
+                { id: 'top-layer4', name: '上图图层 5', image: 'e5.gif' },
+                { id: 'top-layer5', name: '上图图层 6', image: 'e6.gif' },
+                { id: 'top-layer6', name: '上图图层 7', image: 'e7.gif' },
+                { id: 'top-layer7', name: '上图图层 8', image: 'e8.gif' },
+                { id: 'top-layer8', name: '上图图层 9', image: 'e9.gif' },
+                { id: 'top-layer9', name: '上图图层 10', image: 'e10.gif' },
+                { id: 'top-layer10', name: '上图图层 11', image: 'e11.gif' },
+								{ id: 'top-layer11', name: '上图图层 12', image: 'e12.gif' },
+                { id: 'top-layer12', name: '上图图层 13', image: 'e13.gif' },
+                { id: 'top-layer13', name: '上图图层 14', image: 'e14.gif' },
+                { id: 'top-layer14', name: '上图图层 15', image: 'e15.gif' },
+                { id: 'top-layer15', name: '上图图层 16', image: 'e16.gif' },
+                { id: 'top-layer16', name: '上图图层 17', image: 'e17.gif' },
+                { id: 'top-layer17', name: '上图图层 18', image: 'e18.gif' },
+                { id: 'top-layer18', name: '上图图层 19', image: 'e19.gif' },
+                { id: 'top-layer19', name: '上图图层 20', image: 'e20.gif' },
+                { id: 'top-layer20', name: '上图图层 21', image: 'e21.gif' }
             ];
             
+            // 底部图层数据 - 使用1.gif到11.gif (现在在下方)
+            const bottomLayers = [
+                { id: 'bottom-layer0', name: '下图图层 1', image: '1.gif' },
+                { id: 'bottom-layer1', name: '下图图层 2', image: '2.gif' },
+                { id: 'bottom-layer2', name: '下图图层 3', image: '3.gif' },
+                { id: 'bottom-layer3', name: '下图图层 4', image: '4.gif' },
+                { id: 'bottom-layer4', name: '下图图层 5', image: '5.gif' },
+                { id: 'bottom-layer5', name: '下图图层 6', image: '6.gif' },
+                { id: 'bottom-layer6', name: '下图图层 7', image: '7.gif' },
+                { id: 'bottom-layer7', name: '下图图层 8', image: '8.gif' },
+                { id: 'bottom-layer8', name: '下图图层 9', image: '9.gif' },
+                { id: 'bottom-layer9', name: '下图图层 10', image: '10.gif' },
+                { id: 'bottom-layer10', name: '下图图层 11', image: '11.gif' },
+								{ id: 'bottom-layer11', name: '下图图层 12', image: '12.gif' },
+                { id: 'bottom-layer12', name: '下图图层 13', image: '13.gif' },
+                { id: 'bottom-layer13', name: '下图图层 14', image: '14.gif' },
+                { id: 'bottom-layer14', name: '下图图层 15', image: '15.gif' },
+                { id: 'bottom-layer15', name: '下图图层 16', image: '16.gif' },
+                { id: 'bottom-layer16', name: '下图图层 17', image: '17.gif' },
+                { id: 'bottom-layer17', name: '下图图层 18', image: '18.gif' },
+                { id: 'bottom-layer18', name: '下图图层 19', image: '19.gif' },
+                { id: 'bottom-layer19', name: '下图图层 20', image: '20.gif' },
+                { id: 'bottom-layer20', name: '下图图层 21', image: '21.gif' }
+            ];
+            
+            let currentLayerIndex = -1;
             let allVisible = false;
-            let currentMaxLayer = -1;
+            let blinkingInterval = null;
             
             // 创建数字控制按钮
-            layers.forEach((layer, index) => {
-                // 确定按钮应该放在哪一行
-                let targetRow;
-                if (index < 10) {
-                    targetRow = buttonRow;
-                } else if (index < 20) {
-                    targetRow = secondRow;
-                } else {
-                    targetRow = thirdRow;
-                }
-                
+            topLayers.forEach((layer, index) => {
                 // 创建数字按钮
                 const numberBtn = document.createElement('button');
                 numberBtn.className = 'number-btn';
-                numberBtn.textContent = index;
+                numberBtn.textContent = index + 1;
                 numberBtn.dataset.layerId = layer.id;
                 numberBtn.dataset.index = index;
-                targetRow.appendChild(numberBtn);
+                buttonsRow.appendChild(numberBtn);
                 
-                // 创建图层元素
-                const layerElement = document.createElement('img');
-                layerElement.id = `${layer.id}-element`;
-                layerElement.className = 'layer';
-                layerElement.src = layer.image;
-                layerElement.alt = layer.name;
-                layerElement.style.zIndex = index + 2;
-                imageContainer.appendChild(layerElement);
+                // 创建顶部图层元素 (现在在上方)
+                const topLayerElement = document.createElement('img');
+                topLayerElement.id = `${layer.id}-element`;
+                topLayerElement.className = 'layer';
+                topLayerElement.src = layer.image;
+                topLayerElement.alt = layer.name;
+                topLayerElement.style.zIndex = index + 2;
+                bottomContainer.appendChild(topLayerElement); // 注意：现在添加到bottom-container
+                
+                // 创建底部图层元素 (现在在下方)
+                const bottomLayer = bottomLayers[index];
+                const bottomLayerElement = document.createElement('img');
+                bottomLayerElement.id = `${bottomLayer.id}-element`;
+                bottomLayerElement.className = 'layer';
+                bottomLayerElement.src = bottomLayer.image;
+                bottomLayerElement.alt = bottomLayer.name;
+                bottomLayerElement.style.zIndex = index + 2;
+                topContainer.appendChild(bottomLayerElement); // 注意：现在添加到top-container
                 
                 // 添加事件监听
                 numberBtn.addEventListener('click', function() {
-                    this.classList.toggle('active');
                     const isActive = this.classList.contains('active');
-                    updateLayerVisibility(layer.id, isActive);
+                    
+                    if (isActive) {
+                        // 如果按钮已经是激活状态，则隐藏图层
+                        this.classList.remove('active');
+                        updateLayerVisibility(layer.id, bottomLayer.id, false);
+                        stopBlinking();
+                        currentLayerIndex = -1;
+                    } else {
+                        // 如果按钮不是激活状态，则先移除其他按钮的激活状态
+                        document.querySelectorAll('.number-btn').forEach(btn => {
+                            btn.classList.remove('active');
+                        });
+                        
+                        // 激活当前按钮并显示图层
+                        this.classList.add('active');
+                        hideAllLayers();
+                        updateLayerVisibility(layer.id, bottomLayer.id, true);
+                        startBlinking(layer.id, bottomLayer.id);
+                        currentLayerIndex = index;
+                    }
+                    
                     updateNavButtons();
                 });
             });
@@ -322,14 +482,14 @@
                 toggleAllLayers();
             });
             
+            // 上一个图层按钮
+            prevLayerBtn.addEventListener('click', function() {
+                showPrevLayer();
+            });
+            
             // 下一个图层按钮
             nextLayerBtn.addEventListener('click', function() {
                 showNextLayer();
-            });
-            
-            // 上一个图层按钮
-            prevLayerBtn.addEventListener('click', function() {
-                hidePrevLayer();
             });
             
             // 键盘事件监听
@@ -338,7 +498,7 @@
                     showNextLayer();
                     event.preventDefault();
                 } else if (event.key === 'ArrowLeft') {
-                    hidePrevLayer();
+                    showPrevLayer();
                     event.preventDefault();
                 } else if (event.key === ' ') {
                     toggleAllLayers();
@@ -346,28 +506,104 @@
                 }
             });
             
-            // 显示下一个图层
-            function showNextLayer() {
-                if (currentMaxLayer < layers.length - 1) {
-                    currentMaxLayer++;
-                    const layerId = `layer${currentMaxLayer}`;
-                    const button = document.querySelector(`.number-btn[data-layer-id="${layerId}"]`);
-                    button.classList.add('active');
-                    updateLayerVisibility(layerId, true);
-                    updateNavButtons();
+            // 开始闪烁效果
+            function startBlinking(topLayerId, bottomLayerId) {
+                stopBlinking(); // 先停止现有的闪烁
+                
+                const topLayerElement = document.getElementById(`${topLayerId}-element`);
+                const bottomLayerElement = document.getElementById(`${bottomLayerId}-element`);
+                
+                if (topLayerElement && bottomLayerElement) {
+                    topLayerElement.classList.add('blinking');
+                    bottomLayerElement.classList.add('blinking');
+                    
+                    // 持续闪烁，直到用户切换图层
                 }
             }
             
-            // 隐藏上一个图层
-            function hidePrevLayer() {
-                if (currentMaxLayer >= 0) {
-                    const layerId = `layer${currentMaxLayer}`;
-                    const button = document.querySelector(`.number-btn[data-layer-id="${layerId}"]`);
-                    button.classList.remove('active');
-                    updateLayerVisibility(layerId, false);
-                    currentMaxLayer--;
-                    updateNavButtons();
+            // 停止闪烁效果
+            function stopBlinking() {
+                document.querySelectorAll('.layer.blinking').forEach(layer => {
+                    layer.classList.remove('blinking');
+                });
+                
+                if (blinkingInterval) {
+                    clearInterval(blinkingInterval);
+                    blinkingInterval = null;
                 }
+            }
+            
+            // 显示下一个图层
+            function showNextLayer() {
+                let nextIndex = currentLayerIndex + 1;
+                
+                // 如果已经是最后一个图层，循环到第一个
+                if (nextIndex >= topLayers.length) {
+                    nextIndex = 0;
+                }
+                
+                // 找到对应的按钮并触发点击
+                const button = document.querySelector(`.number-btn[data-index="${nextIndex}"]`);
+                if (button) {
+                    // 先移除其他按钮的激活状态
+                    document.querySelectorAll('.number-btn').forEach(btn => {
+                        btn.classList.remove('active');
+                    });
+                    
+                    // 激活当前按钮
+                    button.classList.add('active');
+                    
+                    // 显示图层
+                    hideAllLayers();
+                    const topLayer = topLayers[nextIndex];
+                    const bottomLayer = bottomLayers[nextIndex];
+                    updateLayerVisibility(topLayer.id, bottomLayer.id, true);
+                    startBlinking(topLayer.id, bottomLayer.id);
+                    currentLayerIndex = nextIndex;
+                }
+                
+                updateNavButtons();
+            }
+            
+            // 显示上一个图层
+            function showPrevLayer() {
+                let prevIndex = currentLayerIndex - 1;
+                
+                // 如果已经是第一个图层，循环到最后一个
+                if (prevIndex < 0) {
+                    prevIndex = topLayers.length - 1;
+                }
+                
+                // 找到对应的按钮并触发点击
+                const button = document.querySelector(`.number-btn[data-index="${prevIndex}"]`);
+                if (button) {
+                    // 先移除其他按钮的激活状态
+                    document.querySelectorAll('.number-btn').forEach(btn => {
+                        btn.classList.remove('active');
+                    });
+                    
+                    // 激活当前按钮
+                    button.classList.add('active');
+                    
+                    // 显示图层
+                    hideAllLayers();
+                    const topLayer = topLayers[prevIndex];
+                    const bottomLayer = bottomLayers[prevIndex];
+                    updateLayerVisibility(topLayer.id, bottomLayer.id, true);
+                    startBlinking(topLayer.id, bottomLayer.id);
+                    currentLayerIndex = prevIndex;
+                }
+                
+                updateNavButtons();
+            }
+            
+            // 隐藏所有图层
+            function hideAllLayers() {
+                topLayers.forEach((topLayer, index) => {
+                    const bottomLayer = bottomLayers[index];
+                    updateLayerVisibility(topLayer.id, bottomLayer.id, false);
+                });
+                stopBlinking();
             }
             
             // 切换所有图层
@@ -377,43 +613,60 @@
                 if (allVisible) {
                     toggleAllBtn.textContent = '全部隐藏';
                     toggleAllBtn.classList.add('active');
+                    // 显示所有图层
+                    topLayers.forEach((topLayer, index) => {
+                        const bottomLayer = bottomLayers[index];
+                        updateLayerVisibility(topLayer.id, bottomLayer.id, true);
+                    });
+                    currentLayerIndex = topLayers.length - 1;
+                    
+                    // 激活所有按钮
+                    document.querySelectorAll('.number-btn').forEach(btn => {
+                        btn.classList.add('active');
+                    });
+                    
+                    // 停止闪烁效果
+                    stopBlinking();
                 } else {
                     toggleAllBtn.textContent = '全部显示';
                     toggleAllBtn.classList.remove('active');
-                }
-                
-                const allButtons = document.querySelectorAll('.number-btn');
-                allButtons.forEach(button => {
-                    if (allVisible) {
-                        button.classList.add('active');
-                    } else {
-                        button.classList.remove('active');
-                    }
-                    const layerId = button.dataset.layerId;
-                    updateLayerVisibility(layerId, allVisible);
-                });
-                
-                if (allVisible) {
-                    currentMaxLayer = layers.length - 1;
-                } else {
-                    currentMaxLayer = -1;
+                    // 隐藏所有图层
+                    hideAllLayers();
+                    currentLayerIndex = -1;
+                    
+                    // 取消所有按钮激活状态
+                    document.querySelectorAll('.number-btn').forEach(btn => {
+                        btn.classList.remove('active');
+                    });
                 }
                 
                 updateNavButtons();
             }
             
-            // 更新图层可见性
-            function updateLayerVisibility(layerId, isVisible) {
-                const layerElement = document.getElementById(`${layerId}-element`);
-                if (layerElement) {
-                    layerElement.style.opacity = isVisible ? 1 : 0;
+            // 更新图层可见性（同时更新顶部和底部）
+            function updateLayerVisibility(topLayerId, bottomLayerId, isVisible) {
+                const topLayerElement = document.getElementById(`${topLayerId}-element`);
+                const bottomLayerElement = document.getElementById(`${bottomLayerId}-element`);
+                
+                if (topLayerElement) {
+                    topLayerElement.style.opacity = isVisible ? 1 : 0;
+                    if (!isVisible) {
+                        topLayerElement.classList.remove('blinking');
+                    }
+                }
+                if (bottomLayerElement) {
+                    bottomLayerElement.style.opacity = isVisible ? 1 : 0;
+                    if (!isVisible) {
+                        bottomLayerElement.classList.remove('blinking');
+                    }
                 }
             }
             
             // 更新导航按钮状态
             function updateNavButtons() {
-                nextLayerBtn.disabled = currentMaxLayer >= layers.length - 1;
-                prevLayerBtn.disabled = currentMaxLayer < 0;
+                // 在单一图层模式下，导航按钮始终可用（循环切换）
+                nextLayerBtn.disabled = false;
+                prevLayerBtn.disabled = false;
             }
             
             // 初始化按钮状态
@@ -421,8 +674,4 @@
         });
     </script>
 </body>
-
 </html>
-
-
-
