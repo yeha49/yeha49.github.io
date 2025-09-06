@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>第二站第一題</title>
+    <title>第二站第七題</title>
     <style>
         * {
             margin: 0;
@@ -16,10 +16,10 @@
             background: linear-gradient(45deg, #1a2a6c, #b21f1f, #fdbbfd);
             color: white;
             min-height: 100vh;
-
+            padding: 0px;
             display: flex;
             flex-direction: column;
-            padding-bottom: 300px; /* 减少底部空间高度 */
+            padding-bottom: 110px;
         }
         
         .container {
@@ -42,9 +42,9 @@
         .images-container {
             display: flex;
             flex-direction: column;
-            gap: 3px; /* 减少上下图片之间的距离为3px */
+            gap: 3px;
             flex: 1;
-            margin-bottom: 15px; /* 减少与控制栏之间的间距 */
+            margin-bottom: 15px;
         }
         
         .image-container {
@@ -58,7 +58,6 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            margin: 3px; /* 添加3px的外边距 */
         }
         
         .base-image, .layer {
@@ -81,18 +80,17 @@
             object-fit: contain;
         }
         
-        /* 闪烁动画 - 每秒3次 */
         .layer.blinking {
             animation: blink 1s infinite;
         }
         
         @keyframes blink {
-            0%, 33.3%, 66.6% { opacity: 1; }
-            16.65%, 49.95%, 83.25% { opacity: 0.5; }
+            0%, 33.3%, 66.6% { opacity: 0.8; }
+            16.65%, 49.95%, 83.25% { opacity: 0; }
         }
         
         .controls {
-            background: rgba(30, 30, 40, 0.45); /* 增加透明度 */
+            background: rgba(30, 30, 40, 0.45);
             backdrop-filter: blur(8px);
             padding: 15px;
             border-radius: 10px;
@@ -217,6 +215,66 @@
             opacity: 0.8;
         }
         
+        /* 悬浮导航按钮样式 - 50%透明度 */
+        .floating-nav {
+            position: fixed;
+            display: flex;
+            gap: 10px;
+            z-index: 999;
+            top: 100px;
+            right: 20px;
+            user-select: none;
+        }
+        
+        .floating-nav-btn {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            border: 2px solid rgba(255, 255, 255, 0.6);
+            background: rgba(40, 40, 50, 0.5);
+            backdrop-filter: blur(5px);
+            color: white;
+            font-size: 1.3rem;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            transition: all 0.2s ease;
+            opacity: 0.5;
+        }
+        
+        .floating-nav-btn:hover {
+            background: rgba(60, 60, 70, 0.7);
+            transform: scale(1.1);
+            opacity: 0.8;
+        }
+        
+        /* 全部显示按钮特殊样式 */
+        .floating-toggle-btn {
+            width: auto;
+            min-width: 45px;
+            padding: 0 12px;
+            border-radius: 22.5px;
+            font-size: 0.9rem;
+            white-space: nowrap;
+        }
+        
+        .floating-toggle-btn.active {
+            background: rgba(76, 175, 80, 0.6);
+            box-shadow: 0 0 10px rgba(76, 175, 80, 0.6);
+        }
+        
+        /* 拖拽时的样式 */
+        .floating-nav.dragging {
+            cursor: grabbing;
+        }
+        
+        .floating-nav.dragging .floating-nav-btn {
+            pointer-events: none;
+        }
+        
         @media (max-width: 992px) {
             .main-controls {
                 gap: 8px;
@@ -231,6 +289,18 @@
                 width: 32px;
                 height: 32px;
                 font-size: 1rem;
+            }
+            
+            .floating-nav-btn {
+                width: 40px;
+                height: 40px;
+                font-size: 1.2rem;
+            }
+            
+            .floating-toggle-btn {
+                min-width: 40px;
+                padding: 0 10px;
+                font-size: 0.85rem;
             }
         }
         
@@ -263,6 +333,23 @@
                 height: 30px;
                 font-size: 0.9rem;
             }
+            
+            .floating-nav {
+                top: 80px;
+                right: 15px;
+            }
+            
+            .floating-nav-btn {
+                width: 38px;
+                height: 38px;
+                font-size: 1.1rem;
+            }
+            
+            .floating-toggle-btn {
+                min-width: 38px;
+                padding: 0 9px;
+                font-size: 0.8rem;
+            }
         }
         
         @media (max-width: 600px) {
@@ -294,6 +381,25 @@
             .key-hint {
                 font-size: 0.8rem;
             }
+            
+            .floating-nav {
+                top: 70px;
+                right: 10px;
+                flex-direction: column;
+            }
+            
+            .floating-nav-btn {
+                width: 35px;
+                height: 35px;
+                font-size: 1rem;
+            }
+            
+            .floating-toggle-btn {
+                min-width: 35px;
+                padding: 0 8px;
+                font-size: 0.75rem;
+                border-radius: 17.5px;
+            }
         }
         
         @media (max-width: 480px) {
@@ -319,6 +425,24 @@
                 height: 26px;
                 font-size: 0.8rem;
             }
+            
+            .floating-nav {
+                top: 60px;
+                right: 8px;
+            }
+            
+            .floating-nav-btn {
+                width: 32px;
+                height: 32px;
+                font-size: 0.9rem;
+            }
+            
+            .floating-toggle-btn {
+                min-width: 32px;
+                padding: 0 7px;
+                font-size: 0.7rem;
+                border-radius: 16px;
+            }
         }
     </style>
 </head>
@@ -326,22 +450,24 @@
     <div class="container">
         <div class="content">
             <div class="images-container">
-                <!-- 对调位置：原来的底部图片现在在上面 -->
                 <div class="image-container" id="bottom-container">
                     <img src="e0.gif" alt="上图" class="base-image">
-                    <!-- 底部图层将通过JavaScript动态添加 -->
                 </div>
                 
-                <!-- 对调位置：原来的顶部图片现在在下面 -->
                 <div class="image-container" id="top-container">
                     <img src="0.gif" alt="下图" class="base-image">
-                    <!-- 顶部图层将通过JavaScript动态添加 -->
                 </div>
                 
-                <!-- 减少空白区域高度 -->
-								<div style='height:100px'></div>
+                <div style='height:100px'></div>
             </div>
         </div>
+    </div>
+
+    <!-- 悬浮导航按钮 -->
+    <div class="floating-nav" id="floating-nav">
+        <div class="floating-nav-btn floating-toggle-btn" id="floating-toggle">全部显示</div>
+        <div class="floating-nav-btn" id="floating-prev">←</div>
+        <div class="floating-nav-btn" id="floating-next">→</div>
     </div>
 
     <div class="controls">
@@ -367,7 +493,13 @@
             const prevLayerBtn = document.getElementById('prev-layer');
             const nextLayerBtn = document.getElementById('next-layer');
             
-            // 顶部图层数据 - 使用e1.gif到e11.gif (现在在上方)
+            // 获取悬浮导航元素
+            const floatingNav = document.getElementById('floating-nav');
+            const floatingToggle = document.getElementById('floating-toggle');
+            const floatingPrev = document.getElementById('floating-prev');
+            const floatingNext = document.getElementById('floating-next');
+            
+            // 顶部图层数据
             const topLayers = [
                 { id: 'top-layer0', name: '上图图层 1', image: 'e1.gif' },
                 { id: 'top-layer1', name: '上图图层 2', image: 'e2.gif' },
@@ -382,7 +514,7 @@
                 { id: 'top-layer10', name: '上图图层 11', image: 'e11.gif' }
             ];
             
-            // 底部图层数据 - 使用1.gif到11.gif (现在在下方)
+            // 底部图层数据
             const bottomLayers = [
                 { id: 'bottom-layer0', name: '下图图层 1', image: '1.gif' },
                 { id: 'bottom-layer1', name: '下图图层 2', image: '2.gif' },
@@ -401,6 +533,15 @@
             let allVisible = false;
             let blinkingInterval = null;
             
+            // 悬浮导航拖拽功能变量
+            let isDragging = false;
+            let isPotentialDrag = false;
+            let dragOffsetX, dragOffsetY;
+            let dragStartX, dragStartY;
+            let dragTimeout;
+            const DRAG_THRESHOLD = 5;
+            const DRAG_DELAY = 200;
+            
             // 创建数字控制按钮
             topLayers.forEach((layer, index) => {
                 // 创建数字按钮
@@ -411,16 +552,16 @@
                 numberBtn.dataset.index = index;
                 buttonsRow.appendChild(numberBtn);
                 
-                // 创建顶部图层元素 (现在在上方)
+                // 创建顶部图层元素
                 const topLayerElement = document.createElement('img');
                 topLayerElement.id = `${layer.id}-element`;
                 topLayerElement.className = 'layer';
                 topLayerElement.src = layer.image;
                 topLayerElement.alt = layer.name;
                 topLayerElement.style.zIndex = index + 2;
-                bottomContainer.appendChild(topLayerElement); // 注意：现在添加到bottom-container
+                bottomContainer.appendChild(topLayerElement);
                 
-                // 创建底部图层元素 (现在在下方)
+                // 创建底部图层元素
                 const bottomLayer = bottomLayers[index];
                 const bottomLayerElement = document.createElement('img');
                 bottomLayerElement.id = `${bottomLayer.id}-element`;
@@ -428,25 +569,22 @@
                 bottomLayerElement.src = bottomLayer.image;
                 bottomLayerElement.alt = bottomLayer.name;
                 bottomLayerElement.style.zIndex = index + 2;
-                topContainer.appendChild(bottomLayerElement); // 注意：现在添加到top-container
+                topContainer.appendChild(bottomLayerElement);
                 
                 // 添加事件监听
                 numberBtn.addEventListener('click', function() {
                     const isActive = this.classList.contains('active');
                     
                     if (isActive) {
-                        // 如果按钮已经是激活状态，则隐藏图层
                         this.classList.remove('active');
                         updateLayerVisibility(layer.id, bottomLayer.id, false);
                         stopBlinking();
                         currentLayerIndex = -1;
                     } else {
-                        // 如果按钮不是激活状态，则先移除其他按钮的激活状态
                         document.querySelectorAll('.number-btn').forEach(btn => {
                             btn.classList.remove('active');
                         });
                         
-                        // 激活当前按钮并显示图层
                         this.classList.add('active');
                         hideAllLayers();
                         updateLayerVisibility(layer.id, bottomLayer.id, true);
@@ -463,6 +601,13 @@
                 toggleAllLayers();
             });
             
+            // 悬浮全部显示按钮事件
+            floatingToggle.addEventListener('click', function(e) {
+                if (!isDragging) {
+                    toggleAllLayers();
+                }
+            });
+            
             // 上一个图层按钮
             prevLayerBtn.addEventListener('click', function() {
                 showPrevLayer();
@@ -471,6 +616,138 @@
             // 下一个图层按钮
             nextLayerBtn.addEventListener('click', function() {
                 showNextLayer();
+            });
+            
+            // 悬浮导航按钮事件 - 点击功能
+            floatingPrev.addEventListener('click', function(e) {
+                if (!isDragging) {
+                    showPrevLayer();
+                }
+            });
+            
+            floatingNext.addEventListener('click', function(e) {
+                if (!isDragging) {
+                    showNextLayer();
+                }
+            });
+            
+            // 悬浮导航拖拽功能 - 鼠标事件
+            function handleDragStart(e) {
+                e.preventDefault();
+                
+                const clientX = e.clientX || (e.touches && e.touches[0].clientX);
+                const clientY = e.clientY || (e.touches && e.touches[0].clientY);
+                
+                dragStartX = clientX;
+                dragStartY = clientY;
+                isPotentialDrag = true;
+                
+                dragTimeout = setTimeout(() => {
+                    if (isPotentialDrag) {
+                        startDragging(clientX, clientY);
+                    }
+                }, DRAG_DELAY);
+                
+                document.addEventListener('mousemove', handleDragMove);
+                document.addEventListener('mouseup', handleDragEnd);
+                document.addEventListener('touchmove', handleDragMove, { passive: false });
+                document.addEventListener('touchend', handleDragEnd);
+            }
+            
+            function handleDragMove(e) {
+                if (!isPotentialDrag && !isDragging) return;
+                
+                const clientX = e.clientX || (e.touches && e.touches[0].clientX);
+                const clientY = e.clientY || (e.touches && e.touches[0].clientY);
+                
+                if (isPotentialDrag && !isDragging) {
+                    const dx = Math.abs(clientX - dragStartX);
+                    const dy = Math.abs(clientY - dragStartY);
+                    
+                    if (dx > DRAG_THRESHOLD || dy > DRAG_THRESHOLD) {
+                        startDragging(clientX, clientY);
+                    }
+                }
+                
+                if (isDragging) {
+                    const x = clientX - dragOffsetX;
+                    const y = clientY - dragOffsetY;
+                    
+                    const maxX = window.innerWidth - floatingNav.offsetWidth;
+                    const maxY = window.innerHeight - floatingNav.offsetHeight;
+                    
+                    floatingNav.style.left = Math.min(Math.max(0, x), maxX) + 'px';
+                    floatingNav.style.top = Math.min(Math.max(0, y), maxY) + 'px';
+                    floatingNav.style.right = 'auto';
+                    
+                    if (e.touches) {
+                        e.preventDefault();
+                    }
+                }
+            }
+            
+            function handleDragEnd() {
+                clearTimeout(dragTimeout);
+                
+                if (isDragging) {
+                    localStorage.setItem('floatingNavPos', JSON.stringify({
+                        left: floatingNav.style.left,
+                        top: floatingNav.style.top
+                    }));
+                }
+                
+                isDragging = false;
+                isPotentialDrag = false;
+                floatingNav.classList.remove('dragging');
+                
+                document.removeEventListener('mousemove', handleDragMove);
+                document.removeEventListener('mouseup', handleDragEnd);
+                document.removeEventListener('touchmove', handleDragMove);
+                document.removeEventListener('touchend', handleDragEnd);
+            }
+            
+            function startDragging(clientX, clientY) {
+                isDragging = true;
+                isPotentialDrag = false;
+                floatingNav.classList.add('dragging');
+                
+                const rect = floatingNav.getBoundingClientRect();
+                dragOffsetX = clientX - rect.left;
+                dragOffsetY = clientY - rect.top;
+            }
+            
+            // 为所有按钮添加拖拽事件监听
+            floatingToggle.addEventListener('mousedown', handleDragStart);
+            floatingToggle.addEventListener('touchstart', handleDragStart, { passive: true });
+            
+            floatingPrev.addEventListener('mousedown', handleDragStart);
+            floatingPrev.addEventListener('touchstart', handleDragStart, { passive: true });
+            
+            floatingNext.addEventListener('mousedown', handleDragStart);
+            floatingNext.addEventListener('touchstart', handleDragStart, { passive: true });
+            
+            // 加载保存的位置
+            const savedPos = localStorage.getItem('floatingNavPos');
+            if (savedPos) {
+                const pos = JSON.parse(savedPos);
+                floatingNav.style.left = pos.left;
+                floatingNav.style.top = pos.top;
+                floatingNav.style.right = 'auto';
+            }
+            
+            // 窗口大小变化时调整位置
+            window.addEventListener('resize', function() {
+                const rect = floatingNav.getBoundingClientRect();
+                const maxX = window.innerWidth - floatingNav.offsetWidth;
+                const maxY = window.innerHeight - floatingNav.offsetHeight;
+                
+                if (rect.right > window.innerWidth) {
+                    floatingNav.style.left = Math.min(parseInt(floatingNav.style.left || 0), maxX) + 'px';
+                }
+                
+                if (rect.bottom > window.innerHeight) {
+                    floatingNav.style.top = Math.min(parseInt(floatingNav.style.top || 0), maxY) + 'px';
+                }
             });
             
             // 键盘事件监听
@@ -489,7 +766,7 @@
             
             // 开始闪烁效果
             function startBlinking(topLayerId, bottomLayerId) {
-                stopBlinking(); // 先停止现有的闪烁
+                stopBlinking();
                 
                 const topLayerElement = document.getElementById(`${topLayerId}-element`);
                 const bottomLayerElement = document.getElementById(`${bottomLayerId}-element`);
@@ -497,8 +774,6 @@
                 if (topLayerElement && bottomLayerElement) {
                     topLayerElement.classList.add('blinking');
                     bottomLayerElement.classList.add('blinking');
-                    
-                    // 持续闪烁，直到用户切换图层
                 }
             }
             
@@ -518,23 +793,18 @@
             function showNextLayer() {
                 let nextIndex = currentLayerIndex + 1;
                 
-                // 如果已经是最后一个图层，循环到第一个
                 if (nextIndex >= topLayers.length) {
                     nextIndex = 0;
                 }
                 
-                // 找到对应的按钮并触发点击
                 const button = document.querySelector(`.number-btn[data-index="${nextIndex}"]`);
                 if (button) {
-                    // 先移除其他按钮的激活状态
                     document.querySelectorAll('.number-btn').forEach(btn => {
                         btn.classList.remove('active');
                     });
                     
-                    // 激活当前按钮
                     button.classList.add('active');
                     
-                    // 显示图层
                     hideAllLayers();
                     const topLayer = topLayers[nextIndex];
                     const bottomLayer = bottomLayers[nextIndex];
@@ -550,23 +820,18 @@
             function showPrevLayer() {
                 let prevIndex = currentLayerIndex - 1;
                 
-                // 如果已经是第一个图层，循环到最后一个
                 if (prevIndex < 0) {
                     prevIndex = topLayers.length - 1;
                 }
                 
-                // 找到对应的按钮并触发点击
                 const button = document.querySelector(`.number-btn[data-index="${prevIndex}"]`);
                 if (button) {
-                    // 先移除其他按钮的激活状态
                     document.querySelectorAll('.number-btn').forEach(btn => {
                         btn.classList.remove('active');
                     });
                     
-                    // 激活当前按钮
                     button.classList.add('active');
                     
-                    // 显示图层
                     hideAllLayers();
                     const topLayer = topLayers[prevIndex];
                     const bottomLayer = bottomLayers[prevIndex];
@@ -594,28 +859,29 @@
                 if (allVisible) {
                     toggleAllBtn.textContent = '全部隐藏';
                     toggleAllBtn.classList.add('active');
-                    // 显示所有图层
+                    floatingToggle.textContent = '全部隐藏';
+                    floatingToggle.classList.add('active');
+                    
                     topLayers.forEach((topLayer, index) => {
                         const bottomLayer = bottomLayers[index];
                         updateLayerVisibility(topLayer.id, bottomLayer.id, true);
                     });
                     currentLayerIndex = topLayers.length - 1;
                     
-                    // 激活所有按钮
                     document.querySelectorAll('.number-btn').forEach(btn => {
                         btn.classList.add('active');
                     });
                     
-                    // 停止闪烁效果
                     stopBlinking();
                 } else {
                     toggleAllBtn.textContent = '全部显示';
                     toggleAllBtn.classList.remove('active');
-                    // 隐藏所有图层
+                    floatingToggle.textContent = '全部显示';
+                    floatingToggle.classList.remove('active');
+                    
                     hideAllLayers();
                     currentLayerIndex = -1;
                     
-                    // 取消所有按钮激活状态
                     document.querySelectorAll('.number-btn').forEach(btn => {
                         btn.classList.remove('active');
                     });
@@ -624,7 +890,7 @@
                 updateNavButtons();
             }
             
-            // 更新图层可见性（同时更新顶部和底部）
+            // 更新图层可见性
             function updateLayerVisibility(topLayerId, bottomLayerId, isVisible) {
                 const topLayerElement = document.getElementById(`${topLayerId}-element`);
                 const bottomLayerElement = document.getElementById(`${bottomLayerId}-element`);
@@ -645,7 +911,6 @@
             
             // 更新导航按钮状态
             function updateNavButtons() {
-                // 在单一图层模式下，导航按钮始终可用（循环切换）
                 nextLayerBtn.disabled = false;
                 prevLayerBtn.disabled = false;
             }
