@@ -16,16 +16,15 @@
             background: linear-gradient(45deg, #1a2a6c, #b21f1f, #fdbbfd);
             color: white;
             min-height: 100vh;
-            padding: 0px;
+            padding: 0;
             display: flex;
             flex-direction: column;
-            padding-bottom: 110px;
         }
         
         .container {
             width: 100%;
             margin: 0 auto;
-            padding: 3px;
+            padding: 3px 0; /* 修复：只保留垂直 padding */
             flex: 1;
             display: flex;
             flex-direction: column;
@@ -37,32 +36,32 @@
             gap: 30px;
             flex: 1;
             width: 100%;
+            min-height: 0; /* 允许动态设置高度 */
         }
         
         .images-container {
             display: flex;
             flex-direction: column;
             gap: 3px;
-            flex: 1;
-            margin-bottom: 15px;
+            margin-bottom: 0px;
             width: 100%;
-						background: #2c3e50;
-    /* ✅ 添加过渡，让容器变化更平滑 */
-    transition: background 0.3s ease;
+            background: #2c3e50;
+            transition: background 0.3s ease;
         }
-				.image-container:hover {
-    background: #34495e;
-}
+        
+        .image-container:hover {
+            background: #34495e;
+        }
         
         /* 竖屏样式 */
         .images-container.portrait {
             flex-direction: column;
         }
         
-        /* 横屏样式 - 修改为更灵活的布局 */
+        /* 横屏样式 */
         .images-container.landscape {
             flex-direction: row;
-            height: 80vh;
+            height: auto; /* 不设死高度 */
         }
         
         .image-container {
@@ -77,15 +76,13 @@
             align-items: center;
         }
         
-        /* 修复：竖屏下的图片容器样式 */
+        /* 竖屏下的图片容器 */
         .images-container.portrait .image-container {
             width: 100%;
             height: auto;
-            min-height: 300px;
-            aspect-ratio: 16/9;
         }
         
-        /* 修复：横屏下的图片容器样式 - 使用更灵活的布局 */
+        /* 横屏下的图片容器 */
         .images-container.landscape .image-container {
             width: 50%;
             height: 100%;
@@ -96,19 +93,7 @@
             transition: opacity 0.3s ease;
             display: block;
             width: 100%;
-    height: 100%;
-    object-fit: contain;
-        }
-        
-        /* 修复：竖屏下的图片样式 - 确保图片完整显示 */
-        .images-container.portrait .base-image,
-        .images-container.portrait .layer {
-            object-fit: contain;
-        }
-        
-        /* 修复：横屏下的图片样式 - 确保图片完整显示 */
-        .images-container.landscape .base-image,
-        .images-container.landscape .layer {
+            height: 100%;
             object-fit: contain;
         }
         
@@ -140,13 +125,9 @@
             padding: 15px;
             border-radius: 10px;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.8);
-            position: fixed;
-            bottom: 15px;
-            left: 50%;
-            transform: translateX(-50%);
             width: calc(100% - 40px);
             max-width: 1600px;
-            z-index: 1000;
+            margin: 0px auto 0px; /* ✅ 水平居中 */
             transition: all 0.3s ease;
             border: 1px solid rgba(255, 255, 255, 0.2);
         }
@@ -296,7 +277,6 @@
             opacity: 0.8;
         }
         
-        /* 全部显示按钮特殊样式 */
         .floating-toggle-btn {
             width: auto;
             min-width: 45px;
@@ -311,7 +291,6 @@
             box-shadow: 0 0 10px rgba(76, 175, 80, 0.6);
         }
         
-        /* 拖拽时的样式 */
         .floating-nav.dragging {
             cursor: grabbing;
         }
@@ -351,17 +330,12 @@
         
         @media (max-width: 768px) {
             .container {
-                padding: 15px;
-            }
-            
-            body {
-                padding-bottom: 65px;
+                padding: 15px 0;
             }
             
             .controls {
-                bottom: 12px;
-                width: calc(100% - 30px);
                 padding: 12px;
+                width: calc(100% - 30px);
             }
             
             .main-controls {
@@ -398,14 +372,9 @@
         }
         
         @media (max-width: 600px) {
-            body {
-                padding-bottom: 60px;
-            }
-            
             .controls {
-                bottom: 10px;
-                width: calc(100% - 20px);
                 padding: 10px;
+                width: calc(100% - 20px);
             }
             
             .main-controls {
@@ -448,12 +417,8 @@
         }
         
         @media (max-width: 480px) {
-            body {
-                padding-bottom: 55px;
-            }
-            
             .controls {
-                bottom: 8px;
+                padding: 8px;
             }
             
             .main-controls {
@@ -502,31 +467,30 @@
                 <div class="image-container" id="top-container">
                     <!-- 上图将在这里显示 -->
                 </div>
+            </div>
+
+            <!-- 控制按钮区域（非固定，流式布局） -->
+            <div class="controls">
+                <div class="main-controls">
+                    <button class="toggle-btn" id="toggle-all">全部显示</button>
+                    <button class="nav-btn" id="prev-layer">←</button>
+                    <button class="nav-btn" id="next-layer">→</button>
+                    
+                    <div class="buttons-row" id="buttons-row">
+                        <!-- 数字按钮将通过JavaScript动态添加 -->
+                    </div>
+                </div>
                 
-                <div style='height:100px'></div>
+                <div class="key-hint">使用左右方向键切换图层，空格键显示/隐藏所有图层</div>
             </div>
         </div>
     </div>
 
-    <!-- 悬浮导航按钮 -->
+    <!-- 悬浮导航按钮（保持固定悬浮） -->
     <div class="floating-nav" id="floating-nav">
         <div class="floating-nav-btn floating-toggle-btn" id="floating-toggle">全部显示</div>
         <div class="floating-nav-btn" id="floating-prev">←</div>
         <div class="floating-nav-btn" id="floating-next">→</div>
-    </div>
-
-    <div class="controls">
-        <div class="main-controls">
-            <button class="toggle-btn" id="toggle-all">全部显示</button>
-            <button class="nav-btn" id="prev-layer">←</button>
-            <button class="nav-btn" id="next-layer">→</button>
-            
-            <div class="buttons-row" id="buttons-row">
-                <!-- 数字按钮将通过JavaScript动态添加 -->
-            </div>
-        </div>
-        
-        <div class="key-hint">使用左右方向键切换图层，空格键显示/隐藏所有图层</div>
     </div>
 
     <script>
@@ -538,6 +502,7 @@
             const toggleAllBtn = document.getElementById('toggle-all');
             const prevLayerBtn = document.getElementById('prev-layer');
             const nextLayerBtn = document.getElementById('next-layer');
+            const content = document.querySelector('.content');
             
             // 获取悬浮导航元素
             const floatingNav = document.getElementById('floating-nav');
@@ -633,19 +598,23 @@
             // 底部图层数据
             const bottomLayers = bottomLayers_m.slice(0, question_no);
             
-            // 创建底图元素
-            let topLayerElement = document.createElement('img');
-            topLayerElement.className = 'base-image';
-            topLayerElement.src = q + '/' + 'e0.gif';
-            topLayerElement.alt = '下图';
-            bottomContainer.appendChild(topLayerElement);
+            // 创建底图元素（下图）
+            let baseBottomImg = document.createElement('img');
+            baseBottomImg.className = 'base-image';
+            baseBottomImg.src = q + '/' + 'e0.gif';
+            baseBottomImg.alt = '下图';
+            baseBottomImg.addEventListener('load', adjustContentHeight);
+            baseBottomImg.addEventListener('error', adjustContentHeight);
+            bottomContainer.appendChild(baseBottomImg);
             
-            // 创建上图元素
-            let bottomLayerElement = document.createElement('img');
-            bottomLayerElement.className = 'base-image';
-            bottomLayerElement.src = q + '/' + '0.gif';
-            bottomLayerElement.alt = '上图';
-            topContainer.appendChild(bottomLayerElement);
+            // 创建上图元素（上图）
+            let baseTopImg = document.createElement('img');
+            baseTopImg.className = 'base-image';
+            baseTopImg.src = q + '/' + '0.gif';
+            baseTopImg.alt = '上图';
+            baseTopImg.addEventListener('load', adjustContentHeight);
+            baseTopImg.addEventListener('error', adjustContentHeight);
+            topContainer.appendChild(baseTopImg);
         
             let currentLayerIndex = -1;
             let allVisible = false;
@@ -672,11 +641,11 @@
                     imagesContainer.classList.add('portrait');
                 }
                 
-                // 修复：确保图层位置正确
                 repositionLayers();
+                adjustContentHeight(); // ✅ 更新布局后调整高度
             }
             
-            // 修复：重新定位所有图层
+            // 重新定位所有图层
             function repositionLayers() {
                 document.querySelectorAll('.layer').forEach(layer => {
                     layer.style.position = 'absolute';
@@ -686,13 +655,46 @@
                 });
             }
             
+            // 动态调整 content 高度
+            function adjustContentHeight() {
+                const imageContainers = document.querySelectorAll('.image-container');
+                const isLandscape = window.innerWidth > window.innerHeight;
+
+                // 检查图片是否加载完成
+                let allImagesLoaded = true;
+                document.querySelectorAll('.base-image, .layer').forEach(img => {
+                    if (!img.complete || img.naturalHeight === 0) {
+                        allImagesLoaded = false;
+                    }
+                });
+
+                if (!allImagesLoaded) {
+                    setTimeout(adjustContentHeight, 100);
+                    return;
+                }
+
+                if (imageContainers.length >= 2) {
+                    const height1 = imageContainers[0].offsetHeight;
+                    const height2 = imageContainers[1].offsetHeight;
+
+                    let targetHeight;
+                    if (isLandscape) {
+                        targetHeight = Math.max(height1, height2);
+                    } else {
+                        targetHeight = height1 + height2 + 10; // +10 补间隙
+                    }
+
+                    content.style.minHeight = targetHeight + 'px';
+                }
+            }
+            
             // 初始化时检测屏幕方向
             updateLayout();
             
             // 监听窗口大小变化
             window.addEventListener('resize', updateLayout);
             
-            // 创建数字控制按钮
+            // 创建数字控制按钮和图层
             topLayers.forEach((layer, index) => {
                 // 创建数字按钮
                 const numberBtn = document.createElement('button');
@@ -710,6 +712,8 @@
                 topLayerElement.src = q + '/' + topLayer.image;
                 topLayerElement.alt = layer.name;
                 topLayerElement.style.zIndex = index + 2;
+                topLayerElement.addEventListener('load', adjustContentHeight);
+                topLayerElement.addEventListener('error', adjustContentHeight);
                 bottomContainer.appendChild(topLayerElement);
                 
                 // 创建底部图层元素
@@ -720,6 +724,8 @@
                 bottomLayerElement.src = q + '/' + bottomLayer.image;
                 bottomLayerElement.alt = bottomLayer.name;
                 bottomLayerElement.style.zIndex = index + 2;
+                bottomLayerElement.addEventListener('load', adjustContentHeight);
+                bottomLayerElement.addEventListener('error', adjustContentHeight);
                 topContainer.appendChild(bottomLayerElement);
                 
                 // 添加事件监听
@@ -900,7 +906,6 @@
                     floatingNav.style.top = Math.min(parseInt(floatingNav.style.top || 0), maxY) + 'px';
                 }
                 
-                // 同时更新布局
                 updateLayout();
             });
             
@@ -1071,6 +1076,9 @@
             
             // 初始化按钮状态
             updateNavButtons();
+
+            // 初始化高度计算
+            setTimeout(adjustContentHeight, 500);
         });
     </script>
 </body>
