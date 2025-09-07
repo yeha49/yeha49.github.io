@@ -55,11 +55,11 @@
         /* 横屏样式 */
         .images-container.landscape {
             flex-direction: row;
-            height: calc(100vh - 200px);
         }
         
         .image-container {
             position: relative;
+            width: 100%;
             border: 0px solid rgba(255, 255, 255, 0.2);
             border-radius: 10px;
             overflow: hidden;
@@ -70,38 +70,10 @@
             align-items: center;
         }
         
-        /* 竖屏下的图片容器样式 */
-        .images-container.portrait .image-container {
-            width: 100%;
-            height: auto;
-            aspect-ratio: 16/9;
-        }
-        
-        /* 横屏下的图片容器样式 */
-        .images-container.landscape .image-container {
-            width: 50%;
-            height: 100%;
-        }
-        
         .base-image, .layer {
+            width: 100%;
             transition: opacity 0.3s ease;
             display: block;
-        }
-        
-        /* 竖屏下的图片样式 */
-        .images-container.portrait .base-image,
-        .images-container.portrait .layer {
-            width: 100%;
-            height: auto;
-        }
-        
-        /* 横屏下的图片样式 */
-        .images-container.landscape .base-image,
-        .images-container.landscape .layer {
-            width: auto;
-            height: 100%;
-            max-width: 100%;
-            object-fit: contain;
         }
         
         .base-image {
@@ -114,17 +86,6 @@
             left: 0;
             opacity: 0;
             z-index: 2;
-        }
-        
-        /* 竖屏下的图层定位 */
-        .images-container.portrait .layer {
-            width: 100%;
-            height: auto;
-        }
-        
-        /* 横屏下的图层定位 */
-        .images-container.landscape .layer {
-            width: auto;
             height: 100%;
             object-fit: contain;
         }
