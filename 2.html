@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>第二站第一題</title>
+    <title>图片图层查看器</title>
     <style>
         * {
             margin: 0;
@@ -24,7 +24,6 @@
         
         .container {
             width: 100%;
-            max-width: 2000px;
             margin: 0 auto;
             padding: 3px;
             flex: 1;
@@ -37,6 +36,7 @@
             flex-direction: column;
             gap: 30px;
             flex: 1;
+            width: 100%;
         }
         
         .images-container {
@@ -45,11 +45,28 @@
             gap: 3px;
             flex: 1;
             margin-bottom: 15px;
+            width: 100%;
+						background: #2c3e50;
+    /* ✅ 添加过渡，让容器变化更平滑 */
+    transition: background 0.3s ease;
+        }
+				.image-container:hover {
+    background: #34495e;
+}
+        
+        /* 竖屏样式 */
+        .images-container.portrait {
+            flex-direction: column;
+        }
+        
+        /* 横屏样式 - 修改为更灵活的布局 */
+        .images-container.landscape {
+            flex-direction: row;
+            height: 80vh;
         }
         
         .image-container {
             position: relative;
-            width: 100%;
             border: 0px solid rgba(255, 255, 255, 0.2);
             border-radius: 10px;
             overflow: hidden;
@@ -60,10 +77,39 @@
             align-items: center;
         }
         
-        .base-image, .layer {
+        /* 修复：竖屏下的图片容器样式 */
+        .images-container.portrait .image-container {
             width: 100%;
+            height: auto;
+            min-height: 300px;
+            aspect-ratio: 16/9;
+        }
+        
+        /* 修复：横屏下的图片容器样式 - 使用更灵活的布局 */
+        .images-container.landscape .image-container {
+            width: 50%;
+            height: 100%;
+            flex: 1;
+        }
+        
+        .base-image, .layer {
             transition: opacity 0.3s ease;
             display: block;
+            width: 100%;
+    height: 100%;
+    object-fit: contain;
+        }
+        
+        /* 修复：竖屏下的图片样式 - 确保图片完整显示 */
+        .images-container.portrait .base-image,
+        .images-container.portrait .layer {
+            object-fit: contain;
+        }
+        
+        /* 修复：横屏下的图片样式 - 确保图片完整显示 */
+        .images-container.landscape .base-image,
+        .images-container.landscape .layer {
+            object-fit: contain;
         }
         
         .base-image {
@@ -72,12 +118,11 @@
         
         .layer {
             position: absolute;
-            top: 0;
-            left: 0;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
             opacity: 0;
             z-index: 2;
-            height: 100%;
-            object-fit: contain;
         }
         
         .layer.blinking {
@@ -215,7 +260,7 @@
             opacity: 0.8;
         }
         
-        /* 悬浮导航按钮样式 - 50%透明度 */
+        /* 悬浮导航按钮样式 */
         .floating-nav {
             position: fixed;
             display: flex;
@@ -449,13 +494,13 @@
 <body>
     <div class="container">
         <div class="content">
-            <div class="images-container">
+            <div class="images-container portrait" id="images-container">
                 <div class="image-container" id="bottom-container">
-                    <img src="e0.gif" alt="上图" class="base-image">
+                    <!-- 底图将在这里显示 -->
                 </div>
                 
                 <div class="image-container" id="top-container">
-                    <img src="0.gif" alt="下图" class="base-image">
+                    <!-- 上图将在这里显示 -->
                 </div>
                 
                 <div style='height:100px'></div>
@@ -489,6 +534,7 @@
             const buttonsRow = document.getElementById('buttons-row');
             const topContainer = document.getElementById('top-container');
             const bottomContainer = document.getElementById('bottom-container');
+            const imagesContainer = document.getElementById('images-container');
             const toggleAllBtn = document.getElementById('toggle-all');
             const prevLayerBtn = document.getElementById('prev-layer');
             const nextLayerBtn = document.getElementById('next-layer');
@@ -499,8 +545,39 @@
             const floatingPrev = document.getElementById('floating-prev');
             const floatingNext = document.getElementById('floating-next');
             
+            const urlParams = new URLSearchParams(window.location.search);
+            const q = urlParams.get('q');
+            
+            // 定義路徑與標題的對應列表
+            const pathTitleList = [
+                ['2-1', '第一題', '11'],
+                ['2-2', '第二題', '21'],
+                ['2-3', '第三題', '17'],
+                ['2-4', '第四題', '20'],
+                ['2-5', '第五題', '19'],
+                ['2-6', '第六題', '22'],
+                ['2-7', '第七題', '16'],
+                ['2-8', '第八題', '16']
+            ];
+            
+            // 預設標題
+            let matchedTitle = '默認標題';
+            let question_no = '0';
+            
+            // 檢查路徑是否包含列表中的任何關鍵字
+            for (const [pathKey, title, stack] of pathTitleList) {
+                if (q == pathKey) {
+                    matchedTitle = title;
+                    question_no = stack;
+                    break;
+                }
+            }
+            
+            // 同時更新頁面標題
+            document.title = matchedTitle;
+            
             // 顶部图层数据
-            const topLayers = [
+            const topLayers_m = [
                 { id: 'top-layer0', name: '上图图层 1', image: 'e1.gif' },
                 { id: 'top-layer1', name: '上图图层 2', image: 'e2.gif' },
                 { id: 'top-layer2', name: '上图图层 3', image: 'e3.gif' },
@@ -511,11 +588,22 @@
                 { id: 'top-layer7', name: '上图图层 8', image: 'e8.gif' },
                 { id: 'top-layer8', name: '上图图层 9', image: 'e9.gif' },
                 { id: 'top-layer9', name: '上图图层 10', image: 'e10.gif' },
-                { id: 'top-layer10', name: '上图图层 11', image: 'e11.gif' }
+                { id: 'top-layer10', name: '上图图层 11', image: 'e11.gif' },
+                { id: 'top-layer11', name: '上图图层 12', image: 'e12.gif' },
+                { id: 'top-layer12', name: '上图图层 13', image: 'e13.gif' },
+                { id: 'top-layer13', name: '上图图层 14', image: 'e14.gif' },
+                { id: 'top-layer14', name: '上图图层 15', image: 'e15.gif' },
+                { id: 'top-layer15', name: '上图图层 16', image: 'e16.gif' },
+                { id: 'top-layer16', name: '上图图层 17', image: 'e17.gif' },
+                { id: 'top-layer17', name: '上图图层 18', image: 'e18.gif' },
+                { id: 'top-layer18', name: '上图图层 19', image: 'e19.gif' },
+                { id: 'top-layer19', name: '上图图层 20', image: 'e20.gif' },
+                { id: 'top-layer20', name: '上图图层 21', image: 'e21.gif' },
+                { id: 'top-layer21', name: '上图图层 22', image: 'e22.gif' }
             ];
             
             // 底部图层数据
-            const bottomLayers = [
+            const bottomLayers_m = [
                 { id: 'bottom-layer0', name: '下图图层 1', image: '1.gif' },
                 { id: 'bottom-layer1', name: '下图图层 2', image: '2.gif' },
                 { id: 'bottom-layer2', name: '下图图层 3', image: '3.gif' },
@@ -526,9 +614,39 @@
                 { id: 'bottom-layer7', name: '下图图层 8', image: '8.gif' },
                 { id: 'bottom-layer8', name: '下图图层 9', image: '9.gif' },
                 { id: 'bottom-layer9', name: '下图图层 10', image: '10.gif' },
-                { id: 'bottom-layer10', name: '下图图层 11', image: '11.gif' }
+                { id: 'bottom-layer10', name: '下图图层 11', image: '11.gif' },
+                { id: 'bottom-layer11', name: '下图图层 12', image: '12.gif' },
+                { id: 'bottom-layer12', name: '下图图层 13', image: '13.gif' },
+                { id: 'bottom-layer13', name: '下图图层 14', image: '14.gif' },
+                { id: 'bottom-layer14', name: '下图图层 15', image: '15.gif' },
+                { id: 'bottom-layer15', name: '下图图层 16', image: '16.gif' },
+                { id: 'bottom-layer16', name: '下图图层 17', image: '17.gif' },
+                { id: 'bottom-layer极', name: '下图图层 18', image: '18.gif' },
+                { id: 'bottom-layer18', name: '下图图层 19', image: '19.gif' },
+                { id: 'bottom-layer19', name: '下图图层 20', image: '20.gif' },
+                { id: 'bottom-layer20', name: '下图图层 21', image: '21.gif' },
+                { id: '极-layer21', name: '下图图层 22', image: '22.gif' }
             ];
             
+            // 顶部图层数据
+            const topLayers = topLayers_m.slice(0, question_no);
+            // 底部图层数据
+            const bottomLayers = bottomLayers_m.slice(0, question_no);
+            
+            // 创建底图元素
+            let topLayerElement = document.createElement('img');
+            topLayerElement.className = 'base-image';
+            topLayerElement.src = q + '/' + 'e0.gif';
+            topLayerElement.alt = '下图';
+            bottomContainer.appendChild(topLayerElement);
+            
+            // 创建上图元素
+            let bottomLayerElement = document.createElement('img');
+            bottomLayerElement.className = 'base-image';
+            bottomLayerElement.src = q + '/' + '0.gif';
+            bottomLayerElement.alt = '上图';
+            topContainer.appendChild(bottomLayerElement);
+        
             let currentLayerIndex = -1;
             let allVisible = false;
             let blinkingInterval = null;
@@ -542,6 +660,38 @@
             const DRAG_THRESHOLD = 5;
             const DRAG_DELAY = 200;
             
+            // 检测屏幕方向并更新布局
+            function updateLayout() {
+                const isLandscape = window.innerWidth > window.innerHeight;
+                
+                if (isLandscape) {
+                    imagesContainer.classList.remove('portrait');
+                    imagesContainer.classList.add('landscape');
+                } else {
+                    imagesContainer.classList.remove('landscape');
+                    imagesContainer.classList.add('portrait');
+                }
+                
+                // 修复：确保图层位置正确
+                repositionLayers();
+            }
+            
+            // 修复：重新定位所有图层
+            function repositionLayers() {
+                document.querySelectorAll('.layer').forEach(layer => {
+                    layer.style.position = 'absolute';
+                    layer.style.top = '50%';
+                    layer.style.left = '50%';
+                    layer.style.transform = 'translate(-50%, -50%)';
+                });
+            }
+            
+            // 初始化时检测屏幕方向
+            updateLayout();
+            
+            // 监听窗口大小变化
+            window.addEventListener('resize', updateLayout);
+            
             // 创建数字控制按钮
             topLayers.forEach((layer, index) => {
                 // 创建数字按钮
@@ -553,10 +703,11 @@
                 buttonsRow.appendChild(numberBtn);
                 
                 // 创建顶部图层元素
+                const topLayer = topLayers[index];
                 const topLayerElement = document.createElement('img');
                 topLayerElement.id = `${layer.id}-element`;
                 topLayerElement.className = 'layer';
-                topLayerElement.src = layer.image;
+                topLayerElement.src = q + '/' + topLayer.image;
                 topLayerElement.alt = layer.name;
                 topLayerElement.style.zIndex = index + 2;
                 bottomContainer.appendChild(topLayerElement);
@@ -566,7 +717,7 @@
                 const bottomLayerElement = document.createElement('img');
                 bottomLayerElement.id = `${bottomLayer.id}-element`;
                 bottomLayerElement.className = 'layer';
-                bottomLayerElement.src = bottomLayer.image;
+                bottomLayerElement.src = q + '/' + bottomLayer.image;
                 bottomLayerElement.alt = bottomLayer.name;
                 bottomLayerElement.style.zIndex = index + 2;
                 topContainer.appendChild(bottomLayerElement);
@@ -642,7 +793,7 @@
                 dragStartY = clientY;
                 isPotentialDrag = true;
                 
-                dragTimeout = setTimeout(() => {
+                dragTimeout = setTimeout(()=> {
                     if (isPotentialDrag) {
                         startDragging(clientX, clientY);
                     }
@@ -748,6 +899,9 @@
                 if (rect.bottom > window.innerHeight) {
                     floatingNav.style.top = Math.min(parseInt(floatingNav.style.top || 0), maxY) + 'px';
                 }
+                
+                // 同时更新布局
+                updateLayout();
             });
             
             // 键盘事件监听
