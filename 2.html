@@ -21,7 +21,6 @@
             flex-direction: column;
         }
         
-        /* 新增：题目导航按钮 */
         .question-nav {
             position: fixed;
             top: 0px;
@@ -54,7 +53,6 @@
             transform: scale(1.1);
         }
         
-        /* 新增：题目指示器 */
         .question-indicator {
             position: fixed;
             top: 6px;
@@ -107,12 +105,10 @@
             background: #34495e;
         }
         
-        /* 竖屏样式 */
         .images-container.portrait {
             flex-direction: column;
         }
         
-        /* 横屏样式 */
         .images-container.landscape {
             flex-direction: row;
             height: auto;
@@ -130,13 +126,11 @@
             align-items: center;
         }
         
-        /* 竖屏下的图片容器 */
         .images-container.portrait .image-container {
             width: 100%;
             height: auto;
         }
         
-        /* 横屏下的图片容器 */
         .images-container.landscape .image-container {
             width: 50%;
             height: 100%;
@@ -164,14 +158,7 @@
             z-index: 2;
         }
         
-        .layer.blinking {
-            animation: blink 1s infinite;
-        }
-        
-        @keyframes blink {
-            0%, 33.3%, 66.6% { opacity: 0.8; }
-            16.65%, 49.95%, 83.25% { opacity: 0; }
-        }
+        /* 移除CSS動畫，改用JavaScript控制 */
         
         .controls {
             background: rgba(30, 30, 40, 0.45);
@@ -295,7 +282,6 @@
             opacity: 0.8;
         }
         
-        /* 悬浮导航按钮样式 */
         .floating-nav {
             position: fixed;
             display: flex;
@@ -352,7 +338,7 @@
         .floating-nav.dragging .floating-nav-btn {
             pointer-events: none;
         }
-        
+
         @media (max-width: 992px) {
             .main-controls {
                 gap: 8px;
@@ -511,12 +497,10 @@
     </style>
 </head>
 <body>
-    <!-- 新增：题目指示器 -->
     <div class="question-indicator" id="question-indicator">
         第 <span id="current-question">0</span> 题 / 共 <span id="total-questions">8</span> 题
     </div>
     
-    <!-- 新增：题目导航按钮 -->
     <div class="question-nav">
         <a href="#" id="prev-question" class="nav-button">←</a>
         <a href="#" id="next-question" class="nav-button">→</a>
@@ -534,7 +518,6 @@
                 </div>
             </div>
 
-            <!-- 控制按钮区域（非固定，流式布局） -->
             <div class="controls">
                 <div class="main-controls">
                     <button class="toggle-btn" id="toggle-all">全部显示</button>
@@ -551,7 +534,6 @@
         </div>
     </div>
 
-    <!-- 悬浮导航按钮（保持固定悬浮） -->
     <div class="floating-nav" id="floating-nav">
         <div class="floating-nav-btn floating-toggle-btn" id="floating-toggle">全部显示</div>
         <div class="floating-nav-btn" id="floating-prev">←</div>
@@ -569,17 +551,14 @@
             const nextLayerBtn = document.getElementById('next-layer');
             const content = document.querySelector('.content');
             
-            // 获取悬浮导航元素
             const floatingNav = document.getElementById('floating-nav');
             const floatingToggle = document.getElementById('floating-toggle');
             const floatingPrev = document.getElementById('floating-prev');
             const floatingNext = document.getElementById('floating-next');
             
-            // 获取题目导航按钮
             const prevQuestionBtn = document.getElementById('prev-question');
             const nextQuestionBtn = document.getElementById('next-question');
             
-            // 获取题目指示器元素
             const questionIndicator = document.getElementById('question-indicator');
             const currentQuestionSpan = document.getElementById('current-question');
             const totalQuestionsSpan = document.getElementById('total-questions');
@@ -587,7 +566,6 @@
             const urlParams = new URLSearchParams(window.location.search);
             const q = urlParams.get('q');
             
-            // 定義路徑與標題的對應列表
             const pathTitleList = [
                 ['2-1', '1. 電動機正反轉兼Y-Δ啟動', '15'],
                 ['2-2', '2. 電動機正反轉兼Y-Δ啟動附瞬時停電保護', '21'],
@@ -599,12 +577,10 @@
                 ['2-8', '8. 三相三線負載之瓦時、乏時、功因、電壓、電流監視盤', '11']
             ];
             
-            // 預設標題
             let matchedTitle = '默認標題';
             let question_no = '0';
             let currentQuestionIndex = -1;
             
-            // 檢查路徑是否包含列表中的任何關鍵字
             for (let i = 0; i < pathTitleList.length; i++) {
                 const [pathKey, title, stack] = pathTitleList[i];
                 if (q == pathKey) {
@@ -615,29 +591,23 @@
                 }
             }
             
-            // 更新题目指示器
             if (currentQuestionIndex >= 0) {
                 currentQuestionSpan.textContent = currentQuestionIndex + 1;
             }
             totalQuestionsSpan.textContent = pathTitleList.length;
             
-            // 設置上一題和下一題的鏈接（循環導航）
             if (currentQuestionIndex >= 0) {
-                // 上一題（循環）
                 const prevIndex = currentQuestionIndex === 0 ? pathTitleList.length - 1 : currentQuestionIndex - 1;
                 const prevQuestion = pathTitleList[prevIndex][0];
                 prevQuestionBtn.href = `2.html?q=${prevQuestion}`;
                 
-                // 下一題（循環）
                 const nextIndex = currentQuestionIndex === pathTitleList.length - 1 ? 0 : currentQuestionIndex + 1;
                 const nextQuestion = pathTitleList[nextIndex][0];
                 nextQuestionBtn.href = `2.html?q=${nextQuestion}`;
             }
             
-            // 同時更新頁面標題
             document.title = matchedTitle;
             
-            // 顶部图层数据
             const topLayers_m = [
                 { id: 'top-layer0', name: '上图图层 1', image: 'e1.gif' },
                 { id: 'top-layer1', name: '上图图层 2', image: 'e2.gif' },
@@ -663,7 +633,6 @@
                 { id: 'top-layer21', name: '上图图层 22', image: 'e22.gif' }
             ];
             
-            // 底部图层数据
             const bottomLayers_m = [
                 { id: 'bottom-layer0', name: '下图图层 1', image: '1.gif' },
                 { id: 'bottom-layer1', name: '下图图层 2', image: '2.gif' },
@@ -689,12 +658,9 @@
                 { id: 'bottom-layer21', name: '下图图层 22', image: '22.gif' }
             ];
             
-            // 顶部图层数据
             const topLayers = topLayers_m.slice(0, question_no);
-            // 底部图层数据
             const bottomLayers = bottomLayers_m.slice(0, question_no);
             
-            // 创建底图元素（下图）
             let baseBottomImg = document.createElement('img');
             baseBottomImg.className = 'base-image';
             baseBottomImg.src = q + '/' + 'e0.gif';
@@ -703,7 +669,6 @@
             baseBottomImg.addEventListener('error', adjustContentHeight);
             bottomContainer.appendChild(baseBottomImg);
             
-            // 创建上图元素（上图）
             let baseTopImg = document.createElement('img');
             baseTopImg.className = 'base-image';
             baseTopImg.src = q + '/' + '0.gif';
@@ -714,9 +679,14 @@
         
             let currentLayerIndex = -1;
             let allVisible = false;
-            let blinkingInterval = null;
             
-            // 悬浮导航拖拽功能变量
+            // 性能優化：使用更高效的閃爍控制
+            let blinkInterval = null;
+            let isBlinking = false;
+            let blinkState = false;
+            const BLINK_INTERVAL = 600; // 降低閃爍頻率
+            
+            // 懸浮導航拖拽功能變量
             let isDragging = false;
             let isPotentialDrag = false;
             let dragOffsetX, dragOffsetY;
@@ -725,7 +695,6 @@
             const DRAG_THRESHOLD = 5;
             const DRAG_DELAY = 200;
             
-            // 检测屏幕方向并更新布局
             function updateLayout() {
                 const isLandscape = window.innerWidth > window.innerHeight;
                 
@@ -741,7 +710,6 @@
                 adjustContentHeight();
             }
             
-            // 重新定位所有图层
             function repositionLayers() {
                 document.querySelectorAll('.layer').forEach(layer => {
                     layer.style.position = 'absolute';
@@ -751,12 +719,10 @@
                 });
             }
             
-            // 动态调整 content 高度
             function adjustContentHeight() {
                 const imageContainers = document.querySelectorAll('.image-container');
                 const isLandscape = window.innerWidth > window.innerHeight;
 
-                // 检查图片是否加载完成
                 let allImagesLoaded = true;
                 document.querySelectorAll('.base-image, .layer').forEach(img => {
                     if (!img.complete || img.naturalHeight === 0) {
@@ -784,15 +750,10 @@
                 }
             }
             
-            // 初始化时检测屏幕方向
             updateLayout();
-            
-            // 监听窗口大小变化
             window.addEventListener('resize', updateLayout);
             
-            // 创建数字控制按钮和图层
             topLayers.forEach((layer, index) => {
-                // 创建数字按钮
                 const numberBtn = document.createElement('button');
                 numberBtn.className = 'number-btn';
                 numberBtn.textContent = index + 1;
@@ -800,7 +761,6 @@
                 numberBtn.dataset.index = index;
                 buttonsRow.appendChild(numberBtn);
                 
-                // 创建顶部图层元素
                 const topLayer = topLayers[index];
                 const topLayerElement = document.createElement('img');
                 topLayerElement.id = `${layer.id}-element`;
@@ -812,7 +772,6 @@
                 topLayerElement.addEventListener('error', adjustContentHeight);
                 bottomContainer.appendChild(topLayerElement);
                 
-                // 创建底部图层元素
                 const bottomLayer = bottomLayers[index];
                 const bottomLayerElement = document.createElement('img');
                 bottomLayerElement.id = `${bottomLayer.id}-element`;
@@ -824,7 +783,6 @@
                 bottomLayerElement.addEventListener('error', adjustContentHeight);
                 topContainer.appendChild(bottomLayerElement);
                 
-                // 添加事件监听
                 numberBtn.addEventListener('click', function() {
                     const isActive = this.classList.contains('active');
                     
@@ -849,29 +807,24 @@
                 });
             });
             
-            // 全部显示/隐藏开关
             toggleAllBtn.addEventListener('click', function() {
                 toggleAllLayers();
             });
             
-            // 悬浮全部显示按钮事件
             floatingToggle.addEventListener('click', function(e) {
                 if (!isDragging) {
                     toggleAllLayers();
                 }
             });
             
-            // 上一个图层按钮
             prevLayerBtn.addEventListener('click', function() {
                 showPrevLayer();
             });
             
-            // 下一个图层按钮
             nextLayerBtn.addEventListener('click', function() {
                 showNextLayer();
             });
             
-            // 悬浮导航按钮事件 - 点击功能
             floatingPrev.addEventListener('click', function(e) {
                 if (!isDragging) {
                     showPrevLayer();
@@ -884,7 +837,6 @@
                 }
             });
             
-            // 悬浮导航拖拽功能 - 鼠标事件
             function handleDragStart(e) {
                 e.preventDefault();
                 
@@ -969,7 +921,6 @@
                 dragOffsetY = clientY - rect.top;
             }
             
-            // 为所有按钮添加拖拽事件监听
             floatingToggle.addEventListener('mousedown', handleDragStart);
             floatingToggle.addEventListener('touchstart', handleDragStart, { passive: true });
             
@@ -979,7 +930,6 @@
             floatingNext.addEventListener('mousedown', handleDragStart);
             floatingNext.addEventListener('touchstart', handleDragStart, { passive: true });
             
-            // 加载保存的位置
             const savedPos = localStorage.getItem('floatingNavPos');
             if (savedPos) {
                 const pos = JSON.parse(savedPos);
@@ -988,7 +938,6 @@
                 floatingNav.style.right = 'auto';
             }
             
-            // 窗口大小变化时调整位置
             window.addEventListener('resize', function() {
                 const rect = floatingNav.getBoundingClientRect();
                 const maxX = window.innerWidth - floatingNav.offsetWidth;
@@ -1005,7 +954,6 @@
                 updateLayout();
             });
             
-            // 键盘事件监听
             document.addEventListener('keydown', function(event) {
                 if (event.key === 'ArrowRight') {
                     showNextLayer();
@@ -1019,32 +967,41 @@
                 }
             });
             
-            // 开始闪烁效果
+            // 性能優化：使用更簡單的閃爍邏輯
             function startBlinking(topLayerId, bottomLayerId) {
                 stopBlinking();
+                isBlinking = true;
+                blinkState = true;
                 
                 const topLayerElement = document.getElementById(`${topLayerId}-element`);
                 const bottomLayerElement = document.getElementById(`${bottomLayerId}-element`);
                 
-                if (topLayerElement && bottomLayerElement) {
-                    topLayerElement.classList.add('blinking');
-                    bottomLayerElement.classList.add('blinking');
-                }
+                blinkInterval = setInterval(() => {
+                    blinkState = !blinkState;
+                    if (topLayerElement) {
+                        topLayerElement.style.opacity = blinkState ? '1' : '0.3';
+                    }
+                    if (bottomLayerElement) {
+                        bottomLayerElement.style.opacity = blinkState ? '1' : '0.3';
+                    }
+                }, BLINK_INTERVAL);
             }
             
-            // 停止闪烁极效果
             function stopBlinking() {
-                document.querySelectorAll('.layer.blinking').forEach(layer => {
-                    layer.classList.remove('blinking');
-                });
-                
-                if (blinkingInterval) {
-                    clearInterval(blinkingInterval);
-                    blinkingInterval = null;
+                isBlinking = false;
+                if (blinkInterval) {
+                    clearInterval(blinkInterval);
+                    blinkInterval = null;
                 }
+                
+                // 重置所有圖層的不透明度
+                document.querySelectorAll('.layer').forEach(layer => {
+                    if (layer.style.opacity !== '0') {
+                        layer.style.opacity = '1';
+                    }
+                });
             }
             
-            // 显示下一个图层
             function showNextLayer() {
                 let nextIndex = currentLayerIndex + 1;
                 
@@ -1071,7 +1028,6 @@
                 updateNavButtons();
             }
             
-            // 显示上一个图层
             function showPrevLayer() {
                 let prevIndex = currentLayerIndex - 1;
                 
@@ -1098,7 +1054,6 @@
                 updateNavButtons();
             }
             
-            // 隐藏所有图层
             function hideAllLayers() {
                 topLayers.forEach((topLayer, index) => {
                     const bottomLayer = bottomLayers[index];
@@ -1107,7 +1062,6 @@
                 stopBlinking();
             }
             
-            // 切换所有图层
             function toggleAllLayers() {
                 allVisible = !allVisible;
                 
@@ -1145,35 +1099,24 @@
                 updateNavButtons();
             }
             
-            // 更新图层可见性
             function updateLayerVisibility(topLayerId, bottomLayerId, isVisible) {
                 const topLayerElement = document.getElementById(`${topLayerId}-element`);
                 const bottomLayerElement = document.getElementById(`${bottomLayerId}-element`);
                 
                 if (topLayerElement) {
-                    topLayerElement.style.opacity = isVisible ? 1 : 0;
-                    if (!isVisible) {
-                        topLayerElement.classList.remove('blinking');
-                    }
+                    topLayerElement.style.opacity = isVisible ? '1' : '0';
                 }
                 if (bottomLayerElement) {
-                    bottomLayerElement.style.opacity = isVisible ? 1 : 0;
-                    if (!isVisible) {
-                        bottomLayerElement.classList.remove('blinking');
-                    }
+                    bottomLayerElement.style.opacity = isVisible ? '1' : '0';
                 }
             }
             
-            // 更新导航按钮状态
             function updateNavButtons() {
                 nextLayerBtn.disabled = false;
                 prevLayerBtn.disabled = false;
             }
             
-            // 初始化按钮状态
             updateNavButtons();
-
-            // 初始化高度计算
             setTimeout(adjustContentHeight, 500);
         });
     </script>
