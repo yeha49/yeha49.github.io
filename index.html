@@ -46,6 +46,20 @@
             color: #8b949e;
         }
         
+        .station-section {
+            margin-bottom: 50px;
+            width: 100%;
+        }
+        
+        .station-title {
+            font-size: 1.8rem;
+            color: #58a6ff;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #30363d;
+            text-align: left;
+        }
+        
         .links-container {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
@@ -137,91 +151,130 @@
 <body>
     <div class="container">
         <div class="header">
-            <span style="font-size:48px; font-weight:bold;">室內配線乙級</span>
-            <span style="font-size:28px">屋內線路裝修(00700)</span>
-						<h1>第二站</h1>
+            <div style="font-size:48px; font-weight:bold;">室內配線乙級</div>
+            <div style="font-size:28px">屋內線路裝修(00700)</div>
         </div>
         
-        <div class="links-container">
-            <a href="2.html?q=2-1" class="link-card">
-                <div class="link-icon">
-                    <i class="fas fa-code"></i>
-                </div>
-                <div class="link-content">
-                    <h2>第一題</h2>
-                    <p>電動機正反轉兼Y-Δ啟動</p>
-                </div>
-            </a>
-            
-            <a href="2.html?q=2-2" class="link-card">
-                <div class="link-icon">
-                    <i class="fas fa-laptop-code"></i>
-                </div>
-                <div class="link-content">
-                    <h2>第二題</h2>
-                    <p>電動機正反轉兼Y-Δ啟動附瞬時停電保護</p>
-                </div>
-            </a>
-            
-            <a href="2.html?q=2-3" class="link-card">
-                <div class="link-icon">
-                    <i class="fas fa-puzzle-piece"></i>
-                </div>
-                <div class="link-content">
-                    <h2>第三題</h2>
-                    <p>兩台抽水泵手動、自動交替</p>
-                </div>
-            </a>
-            
-            <a href="2.html?q=2-4" class="link-card">
-                <div class="link-icon">
-                    <i class="fas fa-cogs"></i>
-                </div>
-                <div class="link-content">
-                    <h2>第四題</h2>
-                    <p>污排水泵手動、自動交互兼異常水位並列運轉</p>
-                </div>
-            </a>
-            
-            <a href="2.html?q=2-5" class="link-card">
-                <div class="link-icon">
-                    <i class="fas fa-calculator"></i>
-                </div>
-                <div class="link-content">
-                    <h2>第五題</h2>
-                    <p>沖床機自動計數直流煞車</p>
-                </div>
-            </a>
-            
-            <a href="2.html?q=2-6" class="link-card">
-                <div class="link-icon">
-                    <i class="fas fa-chart-bar"></i>
-                </div>
-                <div class="link-content">
-                    <h2>第六題</h2>
-                    <p>大門控制</p>
-                </div>
-            </a>
-            
-            <a href="2.html?q=2-7" class="link-card">
-                <div class="link-icon">
-                    <i class="fas fa-database"></i>
-                </div>
-                <div class="link-content">
-                    <h2>第七題</h2>
-                    <p>常用電源與備用電源自動切換</p>
-                </div>
-            </a>
-            
-            <a href="2.html?q=2-8" class="link-card">
-                <div class="link-icon">
-                    <i class="fas fa-rocket"></i>
-                </div>
-                <div class="link-content">
-                    <h2>第八題</h2>
-                    <p>三相三線負載之瓦時、乏時、功因、電壓、電流監視盤</p>
-                </div>
-            </a>
+        <!-- 第一站 -->
+        <div class="station-section">
+            <h2 class="station-title">第一站</h2>
+            <div class="links-container">
+                <a href="exam114shop1/1.html?q=1-1" class="link-card">
+                    <div class="link-icon">
+                        <i class="fas fa-bolt"></i>
+                    </div>
+                    <div class="link-content">
+                        <h2>第一題</h2>
+                        <p>單相三線式110/220V</p>
+                    </div>
+                </a>
+                
+                <a href="exam114shop1/1.html?q=1-2" class="link-card">
+                    <div class="link-icon">
+                        <i class="fas fa-plug"></i>
+                    </div>
+                    <div class="link-content">
+                        <h2>第二題</h2>
+                        <p>三相三線式220V</p>
+                    </div>
+                </a>
+                
+                <a href="exam114shop1/1.html?q=1-3" class="link-card">
+                    <div class="link-icon">
+                        <i class="fas fa-power-off"></i>
+                    </div>
+                    <div class="link-content">
+                        <h2>第三題</h2>
+                        <p>三相四線式220/380V</p>
+                    </div>
+                </a>
+            </div>
+        </div>
+        
+        <!-- 第二站 -->
+        <div class="station-section">
+            <h2 class="station-title">第二站</h2>
+            <div class="links-container">
+                <a href="2.html?q=2-1" class="link-card">
+                    <div class="link-icon">
+                        <i class="fas fa-code"></i>
+                    </div>
+                    <div class="link-content">
+                        <h2>第一題</h2>
+                        <p>電動機正反轉兼Y-Δ啟動</p>
+                    </div>
+                </a>
+                
+                <a href="2.html?q=2-2" class="link-card">
+                    <div class="link-icon">
+                        <i class="fas fa-laptop-code"></i>
+                    </div>
+                    <div class="link-content">
+                        <h2>第二題</h2>
+                        <p>電動機正反轉兼Y-Δ啟動附瞬時停電保護</p>
+                    </div>
+                </a>
+                
+                <a href="2.html?q=2-3" class="link-card">
+                    <div class="link-icon">
+                        <i class="fas fa-puzzle-piece"></i>
+                    </div>
+                    <div class="link-content">
+                        <h2>第三題</h2>
+                        <p>兩台抽水泵手動、自動交替</p>
+                    </div>
+                </a>
+                
+                <a href="2.html?q=2-4" class="link-card">
+                    <div class="link-icon">
+                        <i class="fas fa-cogs"></i>
+                    </div>
+                    <div class="link-content">
+                        <h2>第四題</h2>
+                        <p>污排水泵手動、自動交互兼異常水位並列運轉</p>
+                    </div>
+                </a>
+                
+                <a href="2.html?q=2-5" class="link-card">
+                    <div class="link-icon">
+                        <i class="fas fa-calculator"></i>
+                    </div>
+                    <div class="link-content">
+                        <h2>第五題</h2>
+                        <p>沖床機自動計數直流煞車</p>
+                    </div>
+                </a>
+                
+                <a href="2.html?q=2-6" class="link-card">
+                    <div class="link-icon">
+                        <i class="fas fa-chart-bar"></i>
+                    </div>
+                    <div class="link-content">
+                        <h2>第六題</h2>
+                        <p>大門控制</p>
+                    </div>
+                </a>
+                
+                <a href="2.html?q=2-7" class="link-card">
+                    <div class="link-icon">
+                        <i class="fas fa-database"></i>
+                    </div>
+                    <div class="link-content">
+                        <h2>第七題</h2>
+                        <p>常用電源與備用電源自動切換</p>
+                    </div>
+                </a>
+                
+                <a href="2.html?q=2-8" class="link-card">
+                    <div class="link-icon">
+                        <i class="fas fa-rocket"></i>
+                    </div>
+                    <div class="link-content">
+                        <h2>第八題</h2>
+                        <p>三相三線負載之瓦時、乏時、功因、電壓、電流監視盤</p>
+                    </div>
+                </a>
+            </div>
         </div>
         
         <div class="footer">
